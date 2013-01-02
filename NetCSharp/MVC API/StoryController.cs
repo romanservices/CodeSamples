@@ -62,7 +62,7 @@ namespace DotFramework.Web.Mvc.Api
                 {
                     var coverArt = new CoverArt
                                        {
-                                           Cover = ResizeImage.ResizeImageFile(@"D:\Projects\Android Projects\StoryTeller\MVC\DotFramework\Src\DotFramework.Web.Mvc\Content\img\64x64.gif",32,32)
+                                           Cover = ResizeImage.ResizeImageFile(@"Content\img\64x64.gif",32,32)
                                        };
                     storey.CoverArt = coverArt;
 
@@ -104,7 +104,7 @@ namespace DotFramework.Web.Mvc.Api
                 {
                     var coverArt = new CoverArt
                     {
-                        Cover = ResizeImage.ResizeImageFile(@"D:\Projects\Android Projects\StoryTeller\MVC\DotFramework\Src\DotFramework.Web.Mvc\Content\img\64x64.gif", 32, 32)
+                        Cover = ResizeImage.ResizeImageFile("\Content\img\64x64.gif", 32, 32)
                     };
                     storey.CoverArt = coverArt;
 
@@ -129,7 +129,7 @@ namespace DotFramework.Web.Mvc.Api
                 {
                     var coverArt = new CoverArt
                     {
-                        Cover = ResizeImage.ResizeImageFile(@"D:\Projects\Android Projects\StoryTeller\MVC\DotFramework\Src\DotFramework.Web.Mvc\Content\img\64x64.gif", 32, 32)
+                        Cover = ResizeImage.ResizeImageFile("contennt\img\64x64.gif", 32, 32)
                     };
                     storey.CoverArt = coverArt;
 
