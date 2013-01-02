@@ -1,0 +1,365 @@
+﻿@using DotFramework.Web.Mvc.Models
+@model DotFramework.Web.Mvc.Models.WriteStoryPageViewModel
+           
+@{
+    ViewBag.Title = "Write a Story";
+    ViewBag.BodyClass = "write story";
+}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    
+    @Html.Partial("Header")
+
+    <body class="@ViewBag.BodyClass" onload="setGenre()">
+
+        <div class="navbar navbar-inverse ">
+            <div class="navbar-inner">
+                <ul class="nav pull-left">
+                    <li class="span2">
+                        <a class="brand" href="/"><img src="/Content/img/storyhound_small.png" /></a>
+                    </li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li>
+                        <a href="#" id="settingsMenuItem" class="toggleSettings">
+                            <i class="icon-edit"></i> Story Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="storySettings" class="out">
+            
+            <div class="storySettingsInner">
+                <a href="#" id="closePanel" class="close toggleSettings">&times;</a>
+                <input type="hidden" id="storyId" value="@(Model.StoryViewModel.StoryID.HasValue ? Model.StoryViewModel.StoryID.Value.ToString() : "")" />
+                <form name="selectForm" >
+                    <fieldset>
+                        <label>Cover Image:</label>
+                        <a href="#coverEdit" data-toggle="modal"><img src="/Image/ShowImage?ImageID=@Model.StoryViewModel.ImageID&Width=287&Height=432" class="coverArt"/></a>
+                    </fieldset>
+
+                    <fieldset>
+                        <label>Genre</label>
+                        <select  class="input-large" name="genreId" >
+                            <option value="">Select a Genre...</option>
+                            @foreach (GenreViewModel item in Model.GenreListViewModel.Genres)
+                            {
+                                <option value="@item.GenreName">@item.GenreName</option>
+                            }
+                        </select>
+                    </fieldset>
+        
+                    <fieldset>
+                        <label>Cost</label>
+                        <input type="number" min="0" class="storyCost" name="storyCost" value="@Model.StoryViewModel.Price"/>
+                        <span >Bone(s)</span> 
+                    </fieldset>
+           
+                </form>
+                        
+                <fieldset class="storyActionButtons span4">
+                    <button id="save" class="btn">Save Draft</button>
+                    <button id="publish" class="btn btn-success">Publish</button>
+                </fieldset>
+            </div>
+        </div>
+
+        <div id="main">
+
+            <div class="story-content">
+                <h1 class="align-center">
+                    
+
+                    @if (Model.StoryAutoSaveViewModel != null)
+                    {
+                        <input id="StoryTitle" class="inline input-xxlarge" placeholder="title" type="text" value="@Model.StoryAutoSaveViewModel.Title" />
+                    }
+                    else
+                    {
+                        <input id="StoryTitle" class="inline input-xxlarge" placeholder="title" type="text" value="@Model.StoryViewModel.StoryTitle" />
+                    }
+                </h1>
+                
+                <h2 class="align-center">
+                    @if (Model.StoryAutoSaveViewModel != null)
+                    {
+                        <input id="Subtitle" class="inline input-xxlarge" placeholder="subtitle" type="text" value="@Model.StoryAutoSaveViewModel.Synopsis" />
+                    }
+                    else
+                    {
+                        <input id="Subtitle" class="inline input-xxlarge" placeholder="subtitle" type="text" value="@Model.StoryViewModel.Synopsis" />
+                    }
+                </h2>
+
+                <h3 class="muted align-center">by @Model.AuthorName</h3>
+                
+                <form id="storyForm">
+                    <textarea id="Content" placeholder="<p>Type your story here. If you want to apply <strong>formatting</strong>, simply highlight the text you would like to
+                    format and a toolbar will appear.</p>">
+                        @if (Model.StoryViewModel.StoryID.HasValue)
+                        {
+                            @Model.StoryViewModel.Content
+                        }
+                        @if (Model.StoryAutoSaveViewModel != null)
+                        {
+                            @Model.StoryAutoSaveViewModel.Content
+                        }
+                </textarea>
+                </form>
+
+                <h3 class="end align-center">Fin</h3>
+
+            </div>
+        </div>
+
+        <div class="modal hide fade in" id="foundAutoSave">
+            <div class="modal-header">
+                <button class="close" data-dismiss="modal">×</button>
+                <h3>We found a story that you were working on but never saved.  What you you like to do?</h3>
+            </div>
+            <p>
+                <a id="write-edit" href="#" style="margin-left: 10" class="btn btn-primary">Edit</a>
+                <a id="write-clear" href="#" class="btn">Clear</a>
+            </p>
+        </div>
+        
+        
+        <div class="modal hide fade in" id="coverEdit">
+            
+            <form action="/login" method="POST">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal">×</button>
+                    <img class="coverEdit" id="cropTarget" src="/Content/img/ornament1.png" />
+                    <h3>Cover Image</h3>
+                </div>
+                <div class="coverEditInner">
+                    <div class="editCoverArtContainer">
+                        <img class="coverArt" src="/Image/ShowImage?ImageID=@Model.StoryViewModel.ImageID&Width=287&Height=432"  alt="" /> 
+                    </div>
+                    
+                    <div class="coverEditRight">
+                        <fieldset>
+                            <input name="file" type="file" id="photoBrowse" >
+                            <input id="photoname" type="text" name="photoname"/>
+                            <button id="browse" class="btn">Browse</button>
+                            <button id="coverEditSubmit" class="btn btn-success" >Submit</button>
+                        </fieldset>
+                        <fieldset class="coverEditActions">
+                             <button id="coverEditSave" class="redBtn img-rounded">Save</button>
+                            <button id="coverEditCancel" class="yellowBtn img-rounded" data-dismiss="modal">Cancel</button>
+                           
+                        </fieldset>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </form>
+        </div>
+  
+        @Html.Partial("Footer")
+        
+        <link href="@Url.Content("~/Content/plugins/redactor/redactor.css")" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="@Url.Content("~/Content/plugins/redactor/redactor.min.js")"> </script>
+
+        <script type="text/javascript">
+            $(function() {
+                // Load view
+                new Poe.Views.Write({ el: $('body'), model: new Poe.Models.Story() });
+            });
+        </script>
+        
+        <!-- Templates -->
+        <script type="text/template" id="alertTemplate">
+            <div class="alert alert-success" style="display:none;">
+                <a class="close" data-dismiss="alert">×</a>
+                Your story has been saved.
+            </div>
+        </script>
+        <script type="text/javascript">
+            
+            function updatePreview(c)
+              {
+                if (parseInt(c.w) > 0)
+                {
+                  var rx = 100 / c.w;
+                  var ry = 100 / c.h;
+
+                  $('#preview').css({
+                    width: Math.round(rx * boundx) + 'px',
+                    height: Math.round(ry * boundy) + 'px',
+                    marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                    marginTop: '-' + Math.round(ry * c.y) + 'px'
+                  });
+                }
+              };
+
+            
+            //Gets the selected genre
+            function getSelectedvalue() {
+                var getSelectedIndex = document.selectForm.genreId.selectedIndex;
+                return getSelectedIndex;
+            }
+
+
+            //uploads a new image
+            $(function () {
+                
+                $('input[type=file]').bind('change', function() {
+                        var str = "";
+                        str = $(this).val();
+                        str = str.replace("C:\\fakepath\\", "");
+                        $("#photoname").val(str);
+                    }).change();
+
+                $("#browse").live('click', function(e) {
+                    $("#photoBrowse").trigger('click');
+                    return false;
+                });
+
+
+                $("#coverEditSubmit").click(function (e) {
+                    e.preventDefault();
+                    var photo = new FormData();
+                    photo.append('photo', $('#photoBrowse')[0].files[0]);
+
+                    $.ajax(
+                        {
+                            url: '/Image/Upload',
+                            type: "POST",
+                            data: photo,
+                            cache: false,
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                console.log(data);
+                            
+                                $("#coverEdit img.coverArt").attr("src", "/Uploads/" + data.FileName);
+                                $("#coverEditSave").show();
+
+                            },
+                            error: function (jqxhr, textStatus, errorThrown) {
+                                console.log(jqxhr);
+                                console.log(textStatus, errorThrown);
+                            }
+                        });
+                });
+            });
+
+            //Sets the story genre from saved value
+            var selected = @Html.Raw(Json.Encode(Model.StoryViewModel.Genre));
+
+            function setGenre() {
+                var list = document.selectForm.genreId;
+                for (var intI = 0; intI < list.options.length - 1; intI++) {
+                    if (list.options[intI].value == selected) {
+                        list.options[intI].selected = true;
+                        list.selectedIndex = intI;
+                    }
+                }
+
+            }           
+
+            //Save Draft / Publish
+            var storyId = @Html.Raw(Json.Encode(Model.StoryViewModel.StoryID));
+            Boolean(stopAutoUpdate = false);
+            //Set AutoSave function 
+            var timerId = setInterval(function() {
+                if (stopAutoUpdate) {
+                    clearInterval(timerId);
+                    return;
+                }
+                autoSave();
+
+            }, 5000);
+            //The auto saving function
+
+            function autoSave() {
+                var p = { Title: $('#StoryTitle').val(), Synopsis: $('#Subtitle').val(), Content: $('#Content').getCode() };
+                $.ajax(
+                    {
+                        url: '/Write/AutoSave',
+                        type: "POST",
+                        data: p,
+                        dataType: 'json'
+                    });
+            }
+
+            //User clicks Save Draft
+            $(function() {
+                $('#save').click(function(e) {
+                    e.preventDefault();
+                    stopAutoUpdate = true;
+                    save("Draft");
+                    window.location = "/DashBoard/Writer";
+                });
+            });
+            //User Clicks Publish
+            $(function() {
+                $('#publish').click(function(e) {
+                    e.preventDefault();
+                    stopAutoUpdate = true;
+                    save("Published");
+                    window.location = "/DashBoard/Writer";
+                });
+            });
+
+            $("#coverEditSave").click(function(e) {
+                e.preventDefault();
+                stopAutoUpdate = true;
+                save("Draft");
+            });
+
+            //Call to Controller to save the story
+            function save(type) {
+                var p = {
+                    Title: $('#StoryTitle').val(),
+                    Synopsis: $('#Subtitle').val(),
+                    Content: $('#Content').getCode(),
+                    PublishStatus: type,
+                    StoryID: storyId,
+                    Genre: getSelectedvalue,
+                    GenreCategory: "Fiction",
+                    Price: $(".storyCost").val(),
+                    CoverArt: $("#coverEdit img.coverArt").attr("src")
+                };
+                $.ajax(
+                    {
+                        url: '/Write/Save',
+                        type: "POST",
+                        data: p,
+                        dataType: 'json',
+                        success: function (data) {
+                            console.log("test");
+                            console.log(data);
+                            console.log(data.StoryID);
+                            window.location = "/Write/?id=" + data.StoryID;
+                        }
+                    });
+            }
+
+            //AutoSaveDraft found alert to user
+            var autoId = @Html.Raw(Json.Encode(Model.StoryAutoSaveViewModel));
+            if (autoId != null) {
+                $('#foundAutoSave').fadeIn();
+            }
+            $(function() {
+                $('#write-edit').click(function(e) {
+                    e.preventDefault();
+                    $('#foundAutoSave').fadeOut();
+                });
+            });
+
+            $(function() {
+                $('#write-clear').click(function(e) {
+                    e.preventDefault();
+                    $('#foundAutoSave').fadeOut();
+                    document.getElementById('StoryTitle').value = '';
+                    document.getElementById('Subtitle').value = '';
+                    $('#Content').setCode('');
+                });
+            });
+
+        </script>
+        
+    </body>
+</html>

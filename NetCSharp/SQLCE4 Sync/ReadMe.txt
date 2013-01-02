@@ -1,0 +1,1 @@
+collection of classes created to simulate SQL replication between full SQL and SQL CE 4.0 (4.0 does not support replication) 

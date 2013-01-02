@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+        <LinearLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dip"
+                android:layout_below="@id/header">
+            <!-- Full Name Label -->
+            <TextView android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      android:textColor="#fff"
+                      android:text="Comment"/>
+            <EditText android:id="@+id/submitReview_Comments"
+                      android:layout_width="fill_parent"
+                      android:layout_height="200dip"
+                      android:layout_marginTop="5dip"
+                      android:singleLine="false"
+                      android:gravity="top"
+                      android:textColor="#000000"
+                      android:layout_marginBottom="20dip"
+                    android:inputType="textAutoComplete"/>
+
+            <Button android:id="@+id/submitReview_btnSubmit"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dip"
+                    android:text="Submit Comment"/>
+        </LinearLayout>
+        <!-- Registration Form Ends -->
+

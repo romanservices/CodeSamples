@@ -1,0 +1,161 @@
+﻿@using DotFramework.Web.Mvc.Models
+@model DotFramework.Web.Mvc.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Home";
+    ViewBag.BodyClass = "home";
+}
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    
+    @Html.Partial("Header")
+
+    <body class="@ViewBag.BodyClass">
+
+        @Html.Partial("Navbar")
+
+        <div id="main">
+            
+            
+            <div id="jms-slideshow" class="jms-slideshow">
+                
+                <!--
+                 @foreach (var item in Model.TopStories.Stories)
+                 {
+ 
+                        <div class="step" data-color="color-1" data-y="500" data-scale="0.4" data-rotate-x="30">
+                            <div class="jms-content">
+                                <a class="pull-left" href="/story/details?storyid=@item.StoryID">
+                                    <img class="media-object" id="CoverArt" src="/Image/ShowImage?ImageID=@item.ImageID&Width=300&Height=300" alt="" />   
+                                </a>
+                                <div class="media-body">
+                                    <h4 class="media-heading">@item.StoryTitle</h4>
+                                    <h6>by @item.Author</h6>
+                                    <h6>Synopsis: @item.Synopsis</h6>
+                                    <h6>Rated @item.AverageRating/5 from(@item.ReviewCount) Reviews - Votes: (@item.VoteCount)</h6>
+                                </div>
+                            </div>
+                        </div>
+                                
+                 }-->
+ 
+                <div class="step" data-color="color-1">
+                    <div class="jms-content">
+                        <a class="pull-left" href="#">
+                            <img class="media-object" id="CoverArt" src="/Content/img/billboard/poe.png" alt="" />   
+                        </a>
+                        <div class="media-body pull-right">
+                            <h1>What if <br/>Edgar Allen Poe<br/> were alive today?</h1>
+                            <a href="/Write" class="billboardCallout">Be the next Poe.<span class="readArrow"></span></a>
+                            <a href="/Browse" class="billboardCallout">Find the next Poe.<span class="readArrow"></span></a>
+                        </div>
+                    </div>
+                </div>
+                
+                 <div class="step" data-color="color-1" data-x="900" data-y="600"  data-scale="1" data-rotate-z="-90" data-rotate-y="-90" data-z="180" >
+                    <div class="jms-content">
+                        <a class="pull-left " href="#">
+                            <img class="media-object" style="margin-left: -50px" id="CoverArt" src="/Content/img/billboard/sherlock.png" alt="" />   
+                        </a>
+                        <div class="media-body pull-right">
+                            <h1>What if<br/> Sherlock Holmes <br/>was written today?</h1>
+                             <a href="/Write" class="billboardCallout">Write the next Holmes.<span class="readArrow"></span></a>
+                            <a href="/Browse" class="billboardCallout">Read the next holmes.<span class="readArrow"></span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row">
+       
+                    <div class="span6 listPanel">
+                        <h4>Top Stories <a class="sub pull-right" href="/Browse">view all</a></h4>
+                        
+
+                        @foreach (var item in Model.TopStories.Stories)
+                        {
+                            <div class="media">
+                                <a class="pull-left imgLink" href="/story/details?storyid=@item.StoryID">
+                                    <img class="media-object" id="CoverArt" src="/Image/ShowImage?ImageID=@item.ImageID&Width=58&Height=87" alt="" />   
+                                </a>
+                                <div class="media-body">
+                                    <h5 class="media-heading">@item.StoryTitle</h5>
+                                    <ul class="storyMeta">
+                                        @if (@item.ReviewCount > 3)
+                                        {
+                                            <li><span class="rating @item.AverageRating">@item.AverageRating</span><span class="voteCount">@item.ReviewCount votes</span></li>
+                                        }
+                                    </ul>
+                                    <a class="pull-right readLink" href="/story/details?storyid=@item.StoryID">Read <span class="readArrow"></span></a>
+                                </div>
+                            </div>
+                                
+                        }
+                    </div>
+                    <div class="span6 listPanel">
+                        <h4>New Stories <a class="sub pull-right" href="/Browse">view all</a></h4>
+                        @foreach (var item in Model.NewStories.Stories)
+                        {
+                            <div class="media">
+                                <a class="pull-left imgLink" href="/story/details?storyID=@item.StoryID">
+                                    <img class="media-object" id="CoverArt" src="/Image/ShowImage?ImageID=@item.ImageID&Width=58&Height=87" alt="" />   
+                                </a>
+                               <div class="media-body">
+                                    <h5 class="media-heading">@item.StoryTitle</h5>
+                                   <ul class="storyMeta">
+                                        <li><span class="grayLabel">Author:</span> @item.Author</li>
+                                        @if (@item.ReviewCount > 3)
+                                        {
+                                            <li><span class="rating @item.AverageRating">@item.AverageRating</span><span class="voteCount">@item.ReviewCount votes</span></li>
+                                        }
+                                    </ul>
+                                    <a class="pull-right readLink" href="/story/details?storyid=@item.StoryID">Read <span class="readArrow"></span></a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+  
+                </div>
+            </div>
+
+        </div>
+  
+        <script type="text/javascript">
+            $(function () {
+                
+                 //slideshow
+                $('#jms-slideshow').jmslideshow();
+                
+
+                // Story item hover
+                $('.media').hover(function () {
+                    $(this).addClass('hover');
+                }, function () {
+                    $(this).removeClass('hover');
+                });
+                
+                // View story
+                $('.media').click(function(e) {
+                    e.preventDefault();
+                    window.location = $('a', this).attr("href");
+                });
+                
+                // Init ratings
+                $('.stars').raty({
+                    hints: ['hate it', 'needs work', 'okay', 'like it', 'love it'],
+                    path: "@Url.Content("~/Content/plugins/raty/img")",
+                    score: function () {
+                        return $(this).attr('data-rating');
+                    },
+                    readOnly: true
+                });
+                
+               
+            }); 
+           
+        </script>
+
+        @Html.Partial("Footer")
+
+    </body>
+</html>
