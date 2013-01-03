@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="App.View.ManageOfficesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ctl="clr-namespace:PEG.App.Controls"
+             xmlns:v="clr-namespace:PEG.App.View" 
+             mc:Ignorable="d" 
+             Background="{DynamicResource WindowBackgroundBrush}"
+             d:DesignHeight="400" d:DesignWidth="600">
+  
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600*" />
+            <ColumnDefinition Width="200" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource PageHeader}"
+                Text="Manage Offices" />
+        <Button Grid.Column="1" Width="100" HorizontalAlignment="Right" Content="New Office" Margin="0,5,10,5"  Style="{StaticResource PrimaryAction}" Command="{Binding NewOfficeCommand}"/>
+
+        <!-- Listing -->
+        <DockPanel Grid.Row="1" Grid.ColumnSpan="2" LastChildFill="True" Style="{StaticResource DataGridWrapper}">
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock DockPanel.Dock="Top" Text="Offices" Style="{StaticResource DataGridHeader}" />
+                <TextBox  Name="SearchBox" Grid.Column="1" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Margin="5,5,5,5"/>
+                <Button 
+                    Grid.Column="2"
+                    Style="{StaticResource DetailsButton}"
+                    Command="{Binding SearchCommand}"
+                    CommandParameter="{Binding Text, ElementName=SearchBox}"/>
+            </Grid>
+           
+           
+
+            <!-- Pager -->
+            <ContentControl Grid.Row="0" Grid.Column="0" DockPanel.Dock="Bottom"
+		            Content="{Binding Path=PagerView}" />
+
+       
+
+            <ListView Name="OfficeListView" 
+                      Width="Auto"
+                      HorizontalContentAlignment="Stretch"
+                      ItemsSource="{Binding OfficeList, UpdateSourceTrigger=PropertyChanged}" IsTextSearchEnabled="True">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="75"
+                                        DisplayMemberBinding="{Binding SenatorOfficeID, StringFormat={}{0:00}}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="SenatorOfficeID" 
+                                                      Content="Office ID" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="75"
+                                        DisplayMemberBinding="{Binding Address.Street}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Address.Street" 
+                                                      Content="Street" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="75"
+                                        DisplayMemberBinding="{Binding Address.Street2}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Address.Street2" 
+                                                      Content="Street 2" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="75"
+                                        DisplayMemberBinding="{Binding Address.City}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Address.City" 
+                                                      Content="City 2" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="75"
+                                        DisplayMemberBinding="{Binding Address.State}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Address.State" 
+                                                      Content="State" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="75"
+                                        DisplayMemberBinding="{Binding Address.ZipCode}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Address.ZipCode" 
+                                                      Content="ZipCode" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                        <GridViewColumn Width="175"
+                                        DisplayMemberBinding="{Binding Senator.ContactInformation.FirstName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Senator.ContactInformation.FirstName" 
+                                                      Content="Senator First Name" />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+              
+                        <GridViewColumn Width="175"
+                                        DisplayMemberBinding="{Binding Senator.ContactInformation.LastName}">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Command="{Binding SortCommand}" 
+                                                      CommandParameter="Senator.ContactInformation.LastName" 
+                                                      Content="Senator Surname"  />
+                            </GridViewColumn.Header>
+                        </GridViewColumn>
+                   
+                        <GridViewColumn Width="40">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="View" />
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button 
+                                        Command="{Binding DataContext.ViewOfficeCommand, 
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType=ListView}}"
+                                        CommandParameter="{Binding OfficeID}"
+                                        Style="{StaticResource DetailsButton}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="40">
+                            <GridViewColumn.Header>
+                                <GridViewColumnHeader Content="Edit" />
+                            </GridViewColumn.Header>
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button 
+                                        Command="{Binding DataContext.EditOfficeCommand, 
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType=ListView}}"
+                                        CommandParameter="{Binding OfficeID}"
+                                        Style="{StaticResource EditButton}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+        </DockPanel>
+    </Grid>
+</UserControl>
